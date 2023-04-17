@@ -22,7 +22,7 @@ public class CardController {
 
     // CREATE CARD
     @PostMapping
-    public ResponseEntity<CardDTO> createCard(@Valid @RequestBody NewCardDTO newCardDTO) throws Exception {
+    public ResponseEntity<CardDTO> createCard(@Valid @RequestBody NewCardDTO newCardDTO) {
         return new ResponseEntity< >(cardService.save(newCardDTO), HttpStatus.CREATED );
     }
 

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miniautorizador.enums.CardStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -24,7 +25,7 @@ public class CardDTO {
 
     private BigDecimal amount;
 
-    private String status;
+    private CardStatus status;
 
     @CreationTimestamp
     @Temporal( TemporalType.TIMESTAMP )

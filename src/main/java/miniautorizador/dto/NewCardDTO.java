@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NewCardDTO {
 
-    private String cardNumber;
+    private String numberCard;
     private String password;
 }
