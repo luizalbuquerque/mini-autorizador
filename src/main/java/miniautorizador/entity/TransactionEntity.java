@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transacao")
+@Table(name = "transaction")
 public class TransactionEntity {
 
     @Id
@@ -25,7 +25,7 @@ public class TransactionEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_card", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     private CardEntity cardEntity;
 
     @Column(name = "amount", nullable = false)
