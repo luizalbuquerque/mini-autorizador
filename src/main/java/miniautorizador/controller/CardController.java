@@ -27,11 +27,10 @@ public class CardController {
     }
 
     // FOUND CARD BY CARD NUMBER
-    @GetMapping( value = "/{cardNumber}" )
-    public ResponseEntity<Object> getCardByNumber(@PathVariable String cardNumber) throws Exception {
-        return new ResponseEntity< >(cardService.findCardByNumberCard(cardNumber), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity< BigDecimal > getCardByNumber(@RequestBody String numberCard) {
+        return new ResponseEntity< >(cardService.findCardByNumberCard(numberCard), HttpStatus.OK);
     }
-
 
     // FOUND CARD BY ID
     @GetMapping(value = "/{id}")

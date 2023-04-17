@@ -43,10 +43,10 @@ public class CardService {
         }
     }
 
-    public BigDecimal findCardByNumberCard(String cardNumber) throws Exception {
-        CardEntity cardEntity = cardRepository.findCardByNumberCard(cardNumber).orElse( null );
+    public BigDecimal findCardByNumberCard(String numberCard){
+        CardEntity cardEntity = cardRepository.findCardByNumberCard(numberCard).orElse( null );
         if ( cardEntity == null ) {
-            throw new Exception("INVALID_NUMBER_CARD");
+            throw new BusinessException("INVALID_NUMBER_CARD");
         }
         return cardEntity.getAmount();
     }
