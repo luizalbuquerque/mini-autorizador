@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping(path = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransactionController {
 
-    @Autowired
     private TransactionService transactionService;
 
 

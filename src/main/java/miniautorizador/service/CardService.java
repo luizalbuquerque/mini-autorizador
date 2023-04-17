@@ -18,7 +18,6 @@ import static miniautorizador.util.ConstantUtils.CARD_NOT_FOUND;
 @Service
 public class CardService {
 
-    @Autowired
     private CardRepository cardRepository;
 
     private ModelMapper mapper = new ModelMapper();

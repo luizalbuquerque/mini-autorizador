@@ -17,10 +17,8 @@ import java.math.BigDecimal;
 @RequestMapping(path = "/card", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CardController {
 
-    @Autowired
     private CardService cardService;
 
-    @Autowired
     private CardRepository cardRepository;
 
 

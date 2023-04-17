@@ -19,10 +19,8 @@ import static miniautorizador.util.ConstantUtils.*;
 
 public class TransactionService {
 
-    @Autowired
     TransactionRepository transactionRepository;
 
-    @Autowired
     private CardRepository cardRepository;
 
     private ModelMapper mapper = new ModelMapper();
