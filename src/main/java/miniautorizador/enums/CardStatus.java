@@ -8,9 +8,7 @@ import lombok.Getter;
 @Getter
 public enum CardStatus {
 
-    INATIVO( "INATIVO" ),
-    ATIVO( "ATIVO" );
-
-    private String value;
+    INATIVO,
+    ATIVO;
 
 }

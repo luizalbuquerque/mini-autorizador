@@ -4,12 +4,16 @@ import miniautorizador.dto.CardDTO;
 import miniautorizador.dto.NewCardDTO;
 import miniautorizador.entity.CardEntity;
 import miniautorizador.enums.CardStatus;
+import miniautorizador.exeption.BusinessException;
 import miniautorizador.repository.CardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+
+import static miniautorizador.util.ConstantUtils.CARD_NOT_FOUND;
 
 @Service
 public class CardService {
@@ -33,6 +37,7 @@ public class CardService {
             throw new Exception("ERROR_CREATING");
         }
     }
+
     public BigDecimal findCardByNumberCard(String cardNumber) throws Exception {
         CardEntity cardEntity = cardRepository.findCardByNumberCard(cardNumber).orElse( null );
         if ( cardEntity == null ) {
@@ -43,5 +48,10 @@ public class CardService {
 
     public boolean isCardExist( CardEntity cardEntity) {
         return cardRepository.findCardByNumberCard( cardEntity.getCardNumber() ).isPresent();
+    }
+
+    public CardEntity findById(Long id) {
+        return cardRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(CARD_NOT_FOUND));
     }
 }
