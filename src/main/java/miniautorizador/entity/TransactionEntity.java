@@ -29,7 +29,7 @@ public class TransactionEntity {
     private CardEntity cardEntity;
 
     @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
+    private BigDecimal value;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

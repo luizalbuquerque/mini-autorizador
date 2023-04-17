@@ -4,14 +4,13 @@ import org.springframework.http.HttpStatus;
 
 public class ConstantUtils {
 
-    private ConstantUtils() {
-        throw new UnsupportedOperationException();
-    }
-    public static final String CARTAO_DUPLICADO = "{cartao.validacao.duplicado}";
-    public static final String CARD_NOT_FOUND = "{card.not.found}";
-    public static final String TRANSACTION_NOT_FOUND = "{transaction.not.found}";
-
-    public static final String TRANSACAO_NAO_ENCONTRADO = "{transaco.nao.encontrado}";
+    public static final String CARTAO_DUPLICADO = "CARTAO_DUPLICADO";
+    public static final String CARD_NOT_FOUND = "CARD_NOT_FOUND";
+    public static final String TRANSACTION_NOT_FOUND = "TRANSACTION_NOT_FOUND";
+    public static final String INSUFFICIENT_BALANCE = "INSUFFICIENT_BALANCE";
+    public static final String INVALID_PASSWORD = "INVALID_PASSWORD";
+    public static final String INATIVE_CARD = "INATIVE_CARD";
+    public static final String INVALID_NUMBER_CARD = "INVALID_NUMBER_CARD";
 
 
 

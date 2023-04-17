@@ -1,6 +1,7 @@
 package miniautorizador.controller;
 
 import jakarta.validation.Valid;
+import miniautorizador.dto.NewTransactionDTO;
 import miniautorizador.dto.TransactionDTO;
 import miniautorizador.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,13 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity< String > createTransaction(@Valid @RequestBody CriaTransacaoModel criaTransacaoModel) {
-        return new ResponseEntity< >(transacaoService.save(criaTransacaoModel), HttpStatus.CREATED );
+    public ResponseEntity< String > createTransaction(@Valid @RequestBody NewTransactionDTO newTransactionDTO) {
+        return new ResponseEntity< >(transactionService.save(newTransactionDTO), HttpStatus.CREATED );
     }
 
     @DeleteMapping( value = "/{id}" )
     public ResponseEntity< String > deleteTransaction( @PathVariable( "id" ) Long id ) {
-        return new ResponseEntity< >( transacaoService.deleteById( id ), HttpStatus.OK );
+        return new ResponseEntity< >( transactionService.deleteById( id ), HttpStatus.OK );
     }
 
 }
