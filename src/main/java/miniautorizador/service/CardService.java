@@ -46,7 +46,7 @@ public class CardService {
     }
 
     public boolean isCardExist( CardEntity cardEntity) {
-        return cardRepository.findCardByNumberCard( cardEntity.getCardNumber() ).isPresent();
+        return cardRepository.findCardByNumberCard( cardEntity.getNumberCard() ).isPresent();
     }
 
     public CardEntity findById(Long id) {

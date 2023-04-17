@@ -9,6 +9,7 @@ import miniautorizador.repository.CardRepository;
 import miniautorizador.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import static miniautorizador.enums.CardStatus.ATIVO;
 import static miniautorizador.util.ConstantUtils.*;
 
+@Service
 public class TransactionService {
 
     TransactionRepository transactionRepository;
@@ -65,7 +67,7 @@ public class TransactionService {
     public String deleteById(Long id ) {
         Optional<TransactionEntity> transacaoEntity = transactionRepository.findById(id);
         if ( transacaoEntity.isPresent() ) {
-            Optional<CardEntity> cardEntity = cardRepository.findCardByNumberCard(transacaoEntity.get().getCardEntity().getCardNumber());
+            Optional<CardEntity> cardEntity = cardRepository.findCardByNumberCard(transacaoEntity.get().getCardEntity().getNumberCard());
             transactionRepository.deleteById(id);
             return "Transação excluída com sucesso.";
         }

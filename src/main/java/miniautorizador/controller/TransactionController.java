@@ -1,10 +1,8 @@
 package miniautorizador.controller;
 
-import jakarta.validation.Valid;
 import miniautorizador.dto.NewTransactionDTO;
 import miniautorizador.dto.TransactionDTO;
 import miniautorizador.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity< String > createTransaction(@Valid @RequestBody NewTransactionDTO newTransactionDTO) {
+    public ResponseEntity< String > createTransaction(@RequestBody NewTransactionDTO newTransactionDTO) {
         return new ResponseEntity< >(transactionService.save(newTransactionDTO), HttpStatus.CREATED );
     }
 

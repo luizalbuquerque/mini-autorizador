@@ -27,9 +27,9 @@ public class CardEntity {
     @Column( name = "id", unique = true, nullable = false )
     private Long id;
 
-    @Column(name = "card_number", nullable = false)
+    @Column(name = "number_card", nullable = false)
     @NotBlank( message = "Card number is mandatory!" )
-    private String cardNumber;
+    private String numberCard;
 
     @Column(name = "password")
     private String password;

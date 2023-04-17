@@ -10,8 +10,4 @@ public interface CardRepository extends JpaRepository<CardEntity, Long> {
 
     Optional<CardEntity> findCardByNumberCard(String cardNumber);
 
-//    List<CardEntity> findAllByOrderByNumberCardAsc();
-//
-//    List<CardEntity> findAllByStatusOrderByNumberCardAsc(CardStatus status);
-
 }
