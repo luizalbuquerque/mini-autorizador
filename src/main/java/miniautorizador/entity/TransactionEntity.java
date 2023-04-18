@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miniautorizador.enums.TypeTransaction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,8 +29,11 @@ public class TransactionEntity {
     @JoinColumn(name = "id", nullable = false)
     private CardEntity cardEntity;
 
-    @Column(name = "amount", nullable = false)
-    private BigDecimal value;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    private BigDecimal value = BigDecimal.valueOf(500);
+
+    @Column(name = "type_transaction")
+    private TypeTransaction typeTransaction;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

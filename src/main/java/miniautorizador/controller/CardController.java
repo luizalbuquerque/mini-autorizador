@@ -3,6 +3,8 @@ package miniautorizador.controller;
 import jakarta.validation.Valid;
 import miniautorizador.dto.CardDTO;
 import miniautorizador.dto.NewCardDTO;
+import miniautorizador.dto.NewTransactionDTO;
+import miniautorizador.entity.CardEntity;
 import miniautorizador.repository.CardRepository;
 import miniautorizador.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;

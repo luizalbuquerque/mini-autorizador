@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,17 +28,20 @@ public class CardEntity {
     private Long id;
 
     @Column(name = "number_card", nullable = false)
-    @NotBlank( message = "Card number is mandatory!" )
+    @NotBlank( message = "Card number is mandatory!")
     private String numberCard;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    private BigDecimal amount = BigDecimal.valueOf(500);
 
     @Column(name = "card_status")
     private CardStatus cardStatus;
+
+    @OneToMany
+    private List<TransactionEntity> transactionEntity;
 
     @CreationTimestamp
     @Temporal( TemporalType.TIMESTAMP )

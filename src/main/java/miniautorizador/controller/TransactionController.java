@@ -2,6 +2,7 @@ package miniautorizador.controller;
 
 import miniautorizador.dto.NewTransactionDTO;
 import miniautorizador.dto.TransactionDTO;
+import miniautorizador.entity.CardEntity;
 import miniautorizador.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class TransactionController {
         return new ResponseEntity< >(transactionService.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping(path = "/list")
     public ResponseEntity<List< TransactionDTO >> listTransactions() throws Exception {
         return new ResponseEntity< >( transactionService.findAll(), HttpStatus.OK );
     }
@@ -39,4 +40,8 @@ public class TransactionController {
         return new ResponseEntity< >( transactionService.deleteById( id ), HttpStatus.OK );
     }
 
+    @PutMapping("/recharge")
+    public CardEntity updateByNumberCard(@RequestBody NewTransactionDTO newTransactionDTO) {
+        return transactionService.recharge(newTransactionDTO);
+    }
 }

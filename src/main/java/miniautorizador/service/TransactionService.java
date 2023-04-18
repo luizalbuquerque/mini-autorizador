@@ -5,14 +5,19 @@ import miniautorizador.dto.TransactionDTO;
 import miniautorizador.entity.CardEntity;
 import miniautorizador.entity.TransactionEntity;
 import miniautorizador.enums.CardStatus;
+import miniautorizador.enums.TypeTransaction;
 import miniautorizador.exeption.BusinessException;
 import miniautorizador.repository.CardRepository;
 import miniautorizador.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,35 +27,48 @@ import static miniautorizador.util.ConstantUtils.*;
 @Service
 public class TransactionService {
 
-    TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
     private CardRepository cardRepository;
 
     private ModelMapper mapper = new ModelMapper();
 
+    public TransactionService(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
+
     public String save(NewTransactionDTO newTransactionDTO) {
 
-        // Take card per numberCard
-        Optional<CardEntity> card = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber());
+        List<TransactionEntity> transactionList = new ArrayList<>();
+        try {
+            CardEntity card = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber())
+                    .orElseThrow(() -> new BusinessException("INVALID_NUMBER_CARD"));
 
-        while (!card.isEmpty()) {
-            while (card.get().getCardStatus().equals(CardStatus.ATIVO)) {
-                while (card.get().getPassword().equals(newTransactionDTO.getPassword())) {
-                    while (card.get().getAmount().compareTo(newTransactionDTO.getValue()) >= 0) {
-                        updateBalance(card, newTransactionDTO.getValue(), "debito");
-                        TransactionEntity transactionEntity = mapper.map(newTransactionDTO, TransactionEntity.class);
-                        transactionEntity.setCardEntity(card.get());
-                        transactionRepository.save(transactionEntity);
-                        return "OK";
-                    }
-                    throw new BusinessException("INSUFFICIENT_BALANCE");
-                }
+            if (card.getCardStatus() != CardStatus.ATIVO) {
+                throw new BusinessException("INATIVE_CARD");
+            }
+
+            if (!card.getPassword().equals(newTransactionDTO.getPassword())) {
                 throw new BusinessException("INVALID_PASSWORD");
             }
-            throw new BusinessException("INATIVE_CARD");
+
+            if (card.getAmount().compareTo(newTransactionDTO.getValue()) < 0) {
+                throw new BusinessException("INSUFFICIENT_BALANCE");
+            }
+
+            updateBalance(Optional.of(card), newTransactionDTO.getValue(), "debito");
+
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setValue(newTransactionDTO.getValue());
+            transactionEntity.setUpdatedAt(Date.from(Instant.now()));
+            transactionEntity.setCardEntity(card);
+            transactionRepository.save(transactionEntity);
+            return "Transação bem sucedida!";
+
+        } catch (Exception ex) {
+            throw new BusinessException("UNEXPECTED_ERROR");
         }
-        throw new BusinessException("INVALID_NUMBER_CARD");
     }
 
     public CardEntity updateBalance (Optional<CardEntity> card, BigDecimal valueTransaction, String typeTransaction) {
@@ -91,5 +109,36 @@ public class TransactionService {
     }
 
 
+    public CardEntity recharge(NewTransactionDTO newTransactionDTO) {
 
+        // Instancing list of transactions
+        List<TransactionEntity> transactionList = new ArrayList<>();
+
+        try {
+            Optional<CardEntity> existentCard = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber());
+
+            // Updating value from client card like alelo, sodexo or other..
+            CardEntity updatedCard = existentCard.get();
+            updatedCard.setAmount(updatedCard.getAmount().add(newTransactionDTO.getValue()));
+            updatedCard.setUpdatedAt(Date.from(Instant.now()));
+
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setValue(newTransactionDTO.getValue());
+            transactionEntity.setTypeTransaction(TypeTransaction.RECHARGE);
+
+            // Adding to list of transactions
+            transactionList.add(transactionEntity);
+
+            // Save transaction
+            TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
+
+            updatedCard.setTransactionEntity(transactionList);
+            CardEntity accountsaved = cardRepository.save(updatedCard);
+            return ResponseEntity.ok().body(accountsaved).getBody();
+
+        } catch (Exception e) {
+            throw new BusinessException("Card not exist");
+        }
+
+    }
 }

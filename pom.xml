@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>mini-autorizador</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>authorizer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>Test VR VA</description>
