@@ -26,10 +26,10 @@ public class CardController {
         return new ResponseEntity< >(cardService.save(newCardDTO), HttpStatus.CREATED );
     }
 
-    // FOUND CARD BY CARD NUMBER
+    // Get Amount by NumberCard
     @GetMapping
-    public ResponseEntity< BigDecimal > getCardByNumber(@RequestBody String numberCard) {
-        return new ResponseEntity< >(cardService.findCardByNumberCard(numberCard), HttpStatus.OK);
+    public ResponseEntity<BigDecimal> getAmountCardByNumber(@RequestBody NewCardDTO newCardDTO) {
+        return new ResponseEntity< >(cardService.findCardByNumberCard(newCardDTO.getNumberCard()), HttpStatus.OK);
     }
 
     // FOUND CARD BY ID

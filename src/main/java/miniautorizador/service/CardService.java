@@ -34,6 +34,7 @@ public class CardService {
 
         try {
             cardEntity.setNumberCard(newCardDTO.getNumberCard());
+            cardEntity.setPassword(newCardDTO.getPassword());
             cardEntity.setAmount(BigDecimal.valueOf( 500,00));
             cardEntity.setCardStatus(CardStatus.ATIVO);
             cardEntity = cardRepository.save(cardEntity);

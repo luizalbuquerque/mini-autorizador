@@ -16,5 +16,4 @@ public class NewTransactionDTO {
         private String cardNumber;
         private String password;
         private BigDecimal value;
-
     }
