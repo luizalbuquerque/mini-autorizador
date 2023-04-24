@@ -1,4 +1,4 @@
-package miniautorizador.exeption;
+package miniautorizador.exception;
 
 public class ResourceNotFoundException extends RuntimeException{
 

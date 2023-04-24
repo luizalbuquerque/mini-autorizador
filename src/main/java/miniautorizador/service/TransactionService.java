@@ -6,7 +6,9 @@ import miniautorizador.entity.CardEntity;
 import miniautorizador.entity.TransactionEntity;
 import miniautorizador.enums.CardStatus;
 import miniautorizador.enums.TypeTransaction;
-import miniautorizador.exeption.BusinessException;
+import miniautorizador.exception.BusinessException;
+import miniautorizador.exception.ModelException;
+import miniautorizador.exception.TransactionErrors;
 import miniautorizador.repository.CardRepository;
 import miniautorizador.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
@@ -43,18 +45,18 @@ public class TransactionService {
         List<TransactionEntity> transactionList = new ArrayList<>();
         try {
             CardEntity card = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber())
-                    .orElseThrow(() -> new BusinessException("INVALID_NUMBER_CARD"));
+                    .orElseThrow(() -> new ModelException(TransactionErrors.INATIVE_CARD));
 
             if (card.getCardStatus() != CardStatus.ATIVO) {
-                throw new BusinessException("INATIVE_CARD");
+                throw new ModelException(TransactionErrors.INATIVE_CARD);
             }
 
             if (!card.getPassword().equals(newTransactionDTO.getPassword())) {
-                throw new BusinessException("INVALID_PASSWORD");
+                throw new ModelException(TransactionErrors.INVALID_PASSWORD);
             }
 
             if (card.getAmount().compareTo(newTransactionDTO.getValue()) < 0) {
-                throw new BusinessException("INSUFFICIENT_BALANCE");
+                throw new ModelException(TransactionErrors.INSUFFICIENT_BALANCE);
             }
 
             updateBalance(Optional.of(card), newTransactionDTO.getValue(), "debito");
@@ -67,7 +69,7 @@ public class TransactionService {
             return "Transação bem sucedida!";
 
         } catch (Exception ex) {
-            throw new BusinessException("UNEXPECTED_ERROR");
+            return  ex.getMessage();
         }
     }
 

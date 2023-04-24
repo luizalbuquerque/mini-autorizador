@@ -4,7 +4,7 @@ import miniautorizador.dto.CardDTO;
 import miniautorizador.dto.NewCardDTO;
 import miniautorizador.entity.CardEntity;
 import miniautorizador.enums.CardStatus;
-import miniautorizador.exeption.BusinessException;
+import miniautorizador.exception.BusinessException;
 import miniautorizador.repository.CardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
