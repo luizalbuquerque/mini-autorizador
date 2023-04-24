@@ -42,43 +42,31 @@ public class TransactionService {
 
     public String save(NewTransactionDTO newTransactionDTO) {
 
-        List<TransactionEntity> transactionList = new ArrayList<>();
-        try {
-            CardEntity card = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber())
-                    .orElseThrow(() -> new ModelException(TransactionErrors.INATIVE_CARD));
-
-            if (card.getCardStatus() != CardStatus.ATIVO) {
-                throw new ModelException(TransactionErrors.INATIVE_CARD);
-            }
-
-            if (!card.getPassword().equals(newTransactionDTO.getPassword())) {
+        Optional<CardEntity> cardEntity = cardRepository.findCardByNumberCard(newTransactionDTO.getCardNumber());
+        while (!cardEntity.isEmpty()) {
+            while (cardEntity.get().getCardStatus().equals(CardStatus.ATIVO)) {
+                while (cardEntity.get().getPassword().equals(newTransactionDTO.getPassword())) {
+                    while (cardEntity.get().getAmount().compareTo(newTransactionDTO.getValue()) >= 0) {
+                        updateBalance((cardEntity), newTransactionDTO.getValue(), "debito");
+                        TransactionEntity transacaoEntity = mapper.map(newTransactionDTO, TransactionEntity.class);
+                        transacaoEntity.setCardEntity(cardEntity.get());
+                        transactionRepository.save(transacaoEntity);
+                        return "OK";
+                    }
+                    throw new ModelException(TransactionErrors.INSUFFICIENT_BALANCE);
+                }
                 throw new ModelException(TransactionErrors.INVALID_PASSWORD);
             }
-
-            if (card.getAmount().compareTo(newTransactionDTO.getValue()) < 0) {
-                throw new ModelException(TransactionErrors.INSUFFICIENT_BALANCE);
-            }
-
-            updateBalance(Optional.of(card), newTransactionDTO.getValue(), "debito");
-
-            TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.setValue(newTransactionDTO.getValue());
-            transactionEntity.setUpdatedAt(Date.from(Instant.now()));
-            transactionEntity.setCardEntity(card);
-            transactionRepository.save(transactionEntity);
-            return "Transação bem sucedida!";
-
-        } catch (Exception ex) {
-            return  ex.getMessage();
+            throw new ModelException(TransactionErrors.INATIVE_CARD);
         }
+        throw new ModelException(TransactionErrors.INVALID_NUMBER_CARD);
     }
+
 
     public CardEntity updateBalance (Optional<CardEntity> card, BigDecimal valueTransaction, String typeTransaction) {
 
         Optional<CardEntity> cardEntity =  cardRepository.findById(card.get().getId());
-
         BigDecimal newAmount = (typeTransaction.equals("debito")) ? cardEntity.get().getAmount().subtract(valueTransaction) : cardEntity.get().getAmount().add(valueTransaction);
-
         cardEntity.get().setAmount(newAmount);
         return cardRepository.save(cardEntity.get());
     }
@@ -134,7 +122,6 @@ public class TransactionService {
             // Save transaction
             TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
 
-            updatedCard.setTransactionEntity(transactionList);
             CardEntity accountsaved = cardRepository.save(updatedCard);
             return ResponseEntity.ok().body(accountsaved).getBody();
 

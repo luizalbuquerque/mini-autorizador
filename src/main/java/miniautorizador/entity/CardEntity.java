@@ -39,9 +39,9 @@ public class CardEntity {
 
     @Column(name = "card_status")
     private CardStatus cardStatus;
-
-    @OneToMany
-    private List<TransactionEntity> transactionEntity;
+//
+//    @OneToMany
+//    private List<TransactionEntity> transactionEntity;
 
     @CreationTimestamp
     @Temporal( TemporalType.TIMESTAMP )
