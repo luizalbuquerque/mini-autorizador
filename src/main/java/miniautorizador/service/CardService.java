@@ -5,6 +5,8 @@ import miniautorizador.dto.NewCardDTO;
 import miniautorizador.entity.CardEntity;
 import miniautorizador.enums.CardStatus;
 import miniautorizador.exception.BusinessException;
+import miniautorizador.exception.CardErrors;
+import miniautorizador.exception.ModelException;
 import miniautorizador.repository.CardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class CardService {
     public CardDTO save(NewCardDTO newCardDTO){
 
         while ( isCardExist(newCardDTO) ) {
-            throw new BusinessException("CARD_EXISTS");
+             throw new ModelException(CardErrors.CARD_EXISTS);
         }
 
         CardEntity cardEntity = new CardEntity();
